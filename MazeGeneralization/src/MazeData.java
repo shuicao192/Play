@@ -10,6 +10,7 @@ public class MazeData {
     private final int exitY;
 
     public char[][] maze;
+    public boolean[][] visited;
 
     public MazeData(int N, int M) {
         if (M % 2 == 0 || M % 2 == 0) {
@@ -18,6 +19,7 @@ public class MazeData {
         this.N = N;
         this.M = M;
         maze = new char[N][M];
+        visited = new boolean[N][M];
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
@@ -57,5 +59,9 @@ public class MazeData {
 
     public int getExitY() {
         return exitY;
+    }
+
+    public boolean inArea(int x, int y){
+        return x >= 0 && x < N && y >= 0 && y < M;
     }
 }
