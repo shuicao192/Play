@@ -69,11 +69,15 @@ public class AlgoFrame extends JFrame {
 
             for (int i = 0; i < data.N; i++) {
                 for (int j = 0; j < data.M; j++) {
-                    if (data.maze[i][j] == MazeData.ROAD) {
+                    if (data.inMist[i][j]) {
+                        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Black);
+                    }else if (data.maze[i][j] == MazeData.ROAD) {
                         AlgoVisHelper.setColor(g2d, AlgoVisHelper.White);
                     } else {
                         AlgoVisHelper.setColor(g2d, AlgoVisHelper.LightBlue);
                     }
+                    if(data.path[i][j])
+                        AlgoVisHelper.setColor(g2d, AlgoVisHelper.Yellow);
                     AlgoVisHelper.fillRectangle(g2d, i * width, j * height, width, height);
                 }
             }
