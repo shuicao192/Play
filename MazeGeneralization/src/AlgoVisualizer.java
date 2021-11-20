@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.util.LinkedList;
+import java.util.Stack;
 
 public class AlgoVisualizer {
 
@@ -25,9 +27,53 @@ public class AlgoVisualizer {
 
     // 动画逻辑
     private void run() {
-        setData(-1,-1);
-        go(data.getEntranceX(), data.getEntranceY() + 1);
-        setData(-1,-1);
+        setData(-1, -1);
+        //go(data.getEntranceX(), data.getEntranceY() + 1);
+        //stackGo(data.getEntranceX(), data.getEntranceY() + 1);
+        queueGo(data.getEntranceX(), data.getEntranceY() + 1);
+        setData(-1, -1);
+    }
+
+    private void queueGo(int x, int y) {
+        LinkedList<Position> queue = new LinkedList<>();
+
+        queue.addLast(new Position(x, y));
+        data.visited[x][y] = true;
+
+        while (!queue.isEmpty()) {
+            Position curPos = queue.removeFirst();
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.x + d[i][0] * 2;
+                int newY = curPos.y + d[i][1] * 2;
+                if (data.inArea(newX,newY) && !data.visited[newX][newY]) {
+                    queue.addLast(new Position(newX,newY));
+                    data.visited[newX][newY] = true;
+                    setData(curPos.x + d[i][0], curPos.y + d[i][1]);
+                }
+            }
+        }
+
+    }
+
+    private void stackGo(int x, int y) {
+        Stack<Position> stack = new Stack<>();
+
+        stack.push(new Position(x, y));
+        data.visited[x][y] = true;
+
+        while (!stack.isEmpty()) {
+            Position curPos = stack.pop();
+            for (int i = 0; i < 4; i++) {
+                int newX = curPos.x + d[i][0] * 2;
+                int newY = curPos.y + d[i][1] * 2;
+                if (data.inArea(newX,newY) && !data.visited[newX][newY]) {
+                    stack.push(new Position(newX,newY));
+                    data.visited[newX][newY] = true;
+                    setData(curPos.x + d[i][0], curPos.y + d[i][1]);
+                }
+            }
+        }
+
     }
 
     private void go(int x, int y) {
@@ -46,7 +92,7 @@ public class AlgoVisualizer {
     }
 
     private void setData(int x, int y) {
-        if(data.inArea(x, y))
+        if (data.inArea(x, y))
             data.maze[x][y] = MazeData.ROAD;
         frame.render(data);
         AlgoVisHelper.pause(DELAY);
